@@ -13,4 +13,7 @@
 #ifndef ___DELETABLE_PRIMES
 #define ___DELETABLE_PRIMES
 
+int remove_digit(int number, int src);
+int get_ways(int number);
+
 #endif
