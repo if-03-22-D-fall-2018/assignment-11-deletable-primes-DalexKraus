@@ -1,9 +1,9 @@
 /*----------------------------------------------------------
- *				HTBLA-Leonding / Class
+ *				HTBLA-Leonding / 2DHIF
  * ---------------------------------------------------------
  * Exercise Number: 0
  * Title:			deletable_primes.c
- * Author:			P. Bauer
+ * Author:			David Kraus
  * Due Date:		October 16, 2012
  * ----------------------------------------------------------
  * Description:
@@ -11,15 +11,23 @@
  * ----------------------------------------------------------
  */
 #include "deletable_primes.h"
-#include <stdbool.h>
-#include <stdio.h>
+#include <math.h>
 
-#define DIGIT_BUFFER_SIZE 128
+bool is_prime_number(unsigned long number)
+{
+    if (number == 1) return false;
 
-int get_number_length(int number)
+    for (int i = 2; i <= sqrt(number); i++)
+    {
+        if (number % i == 0) return false;
+    }
+    return true;
+}
+
+int get_length(unsigned long number)
 {
     int length = 0;
-    while (number > 1)
+    while (number != 0)
     {
         number /= 10;
         length++;
@@ -27,71 +35,29 @@ int get_number_length(int number)
     return length;
 }
 
-void number_to_array(int* buffer, int number)
+unsigned long remove_digit(int i, unsigned long number)
 {
-    int num_len = get_number_length(number);
-    for (int i = 0; i < num_len; i++)
-    {
-        buffer[num_len - i - 1] = number % 10;
-        number /= 10;
-    }
+    long left = 0, right = 0;
+    
+    if (i == 0) return number / 10;
+
+    left  = number / pow(10, i + 1);
+    right = number % (unsigned long) pow(10, i);
+
+    return left * pow(10, i) + right;
 }
 
-bool is_prime_number(int number)
-{
-    bool isPrime = true;
-    for (int i = 2; i <= number / 2; ++i)
-    {
-        if (number % i == 0)
-        {
-            isPrime = false;
-            break;
-        }
-    }
-    return isPrime;
-}
-
-int remove_digit(int number, int src)
-{
-    int digit_buffer[DIGIT_BUFFER_SIZE];
-    for (int i = 0; i < DIGIT_BUFFER_SIZE; i++)
-        digit_buffer[i] = -1;
-
-    number_to_array(digit_buffer, src);
-
-    //Delete all equal digits
-    for (int i = 0; i < DIGIT_BUFFER_SIZE; i++)
-    {
-        if (digit_buffer[i] != -1 && digit_buffer[i] == number)
-            digit_buffer[i]  = -1;
-    }
-
-    //Convert back to int
-    int result = 0;
-    for (int i = 0; i < get_number_length(src); i++)
-    {
-        if (digit_buffer[i] != -1) 
-            result = 10 * result + digit_buffer[i]; 
-    }
-
-    return result;
-}
-
-int get_ways(int number)
+int get_ways(unsigned long number)
 {
     int ways = 0;
-    if (number >= 10)
-        number = remove_digit(number % 10, number);
-    
-    if (is_prime_number(number))
+    for (int i = 0; i < get_length(number); i++)
     {
-        ways += get_ways(number);
+        if (get_length(number) == 1 && is_prime_number(number)) return 1;
+        
+        if (is_prime_number(remove_digit(i, number)))
+        {
+            ways += get_ways(remove_digit(i, number));
+        }
     }
-
     return ways;
-}
-
-int main(int argc, const char* argv[])
-{
-    return 0;
 }

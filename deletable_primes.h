@@ -1,9 +1,9 @@
 /*----------------------------------------------------------
- *				HTBLA-Leonding / Klasse: 2AHDV
+ *				HTBLA-Leonding / Klasse: 2DHIF
  * ---------------------------------------------------------
  * Exercise Number: 0
  * Title:			deletable_primes.h
- * Author:			P. Bauer
+ * Author:			David Kraus
  * Due Date:		December 1, 2010
  * ----------------------------------------------------------
  * Description:
@@ -13,7 +13,7 @@
 #ifndef ___DELETABLE_PRIMES
 #define ___DELETABLE_PRIMES
 
-int remove_digit(int number, int src);
-int get_ways(int number);
+unsigned long remove_digit(int index, unsigned long number);
+int get_ways(unsigned long number);
 
 #endif
